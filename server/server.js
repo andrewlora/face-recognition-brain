@@ -1,8 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-const PORT = 3000;
+app.use(cors());
+const PORT = 3001;
 const dataBase = {
   users: [
     {
@@ -22,17 +24,17 @@ const dataBase = {
       joined: new Date(),
     },
   ],
+  login: [{}],
 };
 app.get('/', (req, res) => {
   res.send(dataBase.users);
 });
 app.post('/signIn', (req, res) => {
-  console.log(req.body);
   if (
     req.body.email === dataBase.users[0].email &&
     req.body.password === dataBase.users[0].password
   ) {
-    res.json('success');
+    res.json(dataBase.users[0]);
   } else {
     res.status(400).json('Error logging in');
   }
