@@ -48,7 +48,6 @@ function App() {
   };
 
   const onRouteChange = (route) => {
-    console.log(route);
     if (route === 'signOut') {
       setIsSignedIn(false);
     } else if (route === 'home') {
@@ -59,13 +58,11 @@ function App() {
 
   const loadUser = (data) => {
     setUser({
-      user: {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        entries: data.entries,
-        joined: data.joined,
-      },
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined,
     });
   };
 

@@ -13,24 +13,21 @@ const SignIn = ({ loadUser, onRouteChange }) => {
   };
 
   const onSubmitSignIn = () => {
-    // fetch('http://localhost:3000/signin', {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     email: signInEmail,
-    //     password: signInPassword,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((user) => {
-    //     if (user.id) {
-    //       loadUser(user);
-    //       onRouteChange('home');
-    //     }
-    //   });
-    setSignInEmail(signInEmail);
-    setSignInPassword(signInPassword);
-    onRouteChange('home');
+    fetch('http://localhost:3001/signIn', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: signInEmail,
+        password: signInPassword,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user.id) {
+          loadUser(user);
+          onRouteChange('home');
+        }
+      });
   };
 
   return (

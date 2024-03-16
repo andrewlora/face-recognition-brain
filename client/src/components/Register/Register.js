@@ -18,26 +18,22 @@ const Register = ({ loadUser, onRouteChange }) => {
   };
 
   const onSubmitSignIn = () => {
-    // fetch('http://localhost:3000/register', {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     email,
-    //     password,
-    //     name,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((user) => {
-    //     if (user) {
-    //       loadUser(user);
-    //       onRouteChange('home');
-    //     }
-    //   });
-    setEmail(email);
-    setName(name);
-    setPassword(password);
-    onRouteChange('home');
+    fetch('http://localhost:3001/register', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        password,
+        name,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user) {
+          loadUser(user);
+          onRouteChange('home');
+        }
+      });
   };
 
   return (
