@@ -74,6 +74,19 @@ function App() {
     setImageUrl(input);
     const result = await clarifaiApi()(input);
     displayFaceBoxes(await calculateFaceLocation(result));
+    fetch('http://localhost:3001/image', {
+      method: 'put',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: user.id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user.id) {
+          loadUser(user);
+        }
+      });
   };
 
   return (

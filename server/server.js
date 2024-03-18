@@ -73,7 +73,7 @@ app.put('/image', (req, res) => {
     if (user.id === id) {
       found = true;
       user.entries++;
-      return res.json(user.entries);
+      return res.json(user);
     }
   });
   if (!found) res.status(404).json('not found user');
