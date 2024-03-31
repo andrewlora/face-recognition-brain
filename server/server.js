@@ -7,7 +7,7 @@ console.log(process.env);
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 var corsOptions = {
-  origin: 'http://localhost:' + process.env.NODE_DOCKER_PORT,
+  origin: 'http://localhost:3000',
 };
 
 app.use(cors(corsOptions));
@@ -120,10 +120,10 @@ app.put('/image', (req, res) => {
   knex('users')
     .where('id', id)
     .increment('entries', 1)
-    .returning('entries')
-    .then((entries) => {
-      console.log(entries);
-      res.json(entries[0]);
+    .returning('*')
+    .then((user) => {
+      console.log(user[0]);
+      res.json(user[0]);
     })
     .catch((err) => {
       console.log(err);
