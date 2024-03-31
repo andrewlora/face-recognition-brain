@@ -10,21 +10,23 @@ import Rank from './components/Rank/Rank';
 import Register from './components/Register/Register';
 import SignIn from './components/SignIn/SignIn';
 
+const initialUser = {
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: '',
+  },
+};
+
 function App() {
   const [route, setRoute] = useState('signIn');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [boxes, setBoxes] = useState([]);
-  const [user, setUser] = useState({
-    user: {
-      id: '',
-      name: '',
-      email: '',
-      entries: 0,
-      joined: '',
-    },
-  });
+  const [user, setUser] = useState(initialUser);
 
   const onInputChange = (event) => {
     setInput(event.target.value);
@@ -50,6 +52,10 @@ function App() {
   const onRouteChange = (route) => {
     if (route === 'signOut') {
       setIsSignedIn(false);
+      setUser(initialUser);
+      setImageUrl('');
+      setInput('');
+      setBoxes([]);
     } else if (route === 'home') {
       setIsSignedIn(true);
     }
