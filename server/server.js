@@ -1,16 +1,20 @@
 const express = require('express');
 const cors = require('cors');
-const bcrypt = require('bcryptjs');
 const knex = require('knex');
 const morgan = require('morgan');
 
 //require('dotenv').config({ path: ['.env.local', '.env'] });
 
-const register = require('./controllers/register');
-const signIn = require('./controllers/signIn');
-const profile = require('./controllers/profile');
-const image = require('./controllers/image');
-const auth = require('./controllers/authorization');
+const {
+  handleProfileGet,
+  handleProfileUpdate,
+} = require('./controllers/profile');
+const { handleImage, handleApiCall } = require('./controllers/image');
+const {
+  signInAuthentication,
+  handleRegister,
+  requireAuth,
+} = require('./controllers/authorization');
 
 //Database Setup
 const db = knex({
@@ -46,23 +50,16 @@ app.get('/', (req, res) => {
       res.send(data);
     });
 });
-
-app.post('/signIn', signIn.signInAuthentication(db, bcrypt));
-app.post('/register', (req, res) => {
-  register.handleRegister(req, res, db, bcrypt);
-});
-app.get('/profile/:id', auth.requireAuth, (req, res) => {
-  profile.handleProfileGet(req, res, db);
-});
-app.post('/profile/:id', auth.requireAuth, (req, res) => {
-  profile.handleProfileUpdate(req, res, db);
-});
-app.put('/image', auth.requireAuth, (req, res) => {
-  image.handleImage(req, res, db);
-});
-app.post('/imageUrl', auth.requireAuth, (req, res) => {
-  image.handleApiCall(req, res);
-});
+app.post('/signIn', signInAuthentication(db));
+app.post('/register', (req, res) => handleRegister(req, res, db));
+app.get('/profile/:id', requireAuth, (req, res) =>
+  handleProfileGet(req, res, db),
+);
+app.post('/profile/:id', requireAuth, (req, res) =>
+  handleProfileUpdate(req, res, db),
+);
+app.put('/image', requireAuth, (req, res) => handleImage(req, res, db));
+app.post('/imageUrl', requireAuth, (req, res) => handleApiCall(req, res));
 
 app.listen(PORT, () => {
   console.log('app is running on port ' + PORT);
