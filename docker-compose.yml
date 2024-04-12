@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  # PostgreSQL
+  postgres:
+    container_name: postgres
+    build: ./server/postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_URL: postgres://admin:password@localhost:5432/face-recognition
+      POSTGRES_DB: face-recognition
+      POSTGRES_HOST: postgres
+    ports:
+      - '5432:5432'
+  # Redis
+  redis:
+    container_name: redis
+    image: redis/redis-stack-server:latest
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+    volumes:
+      - redis_data:/data
+  # Backend
+  api:
+    # env_file:
+    #   - ./.private/api-keys.env "Another way to insert env variables"
+    container_name: api
+    build: ./server
+    volumes:
+      - ./server:/usr/src/api
+    command: npm start
+    working_dir: /usr/src/api
+    ports:
+      - '3001:3001'
+    environment:
+      POSTGRES_URI: postgres://admin:password@postgres:5432/face-recognition
+      REDIS_URI: redis://redis:6379
+      API_PORT: 3001
+    # Heads up! Docker has updated this feature and now you don't need to define the links property in order for things to work - https://docs.docker.com/compose/networking/
+    # links:
+    #   - postgres
+    #   - redis
+volumes:
+  redis_data:

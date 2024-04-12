@@ -1,4 +1,4 @@
-# SmartBrain-api - Dockerized
+# Face-Recognition-api - Dockerized
 
 Final project for ZTM course - using Docker
 
