@@ -1,10 +1,18 @@
-FROM node:lts-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
-COPY . .
-EXPOSE 3001
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
+FROM node:20-alpine
+
+# Create app directory
+RUN mkdir -p /usr/src/api
+WORKDIR /usr/src/api
+
+# Install app dependencies
+COPY package.json /usr/src/api
+RUN npm install
+
+# Bundle app source
+COPY ./ /usr/src/api
+
+# Build arguments
+ARG NODE_VERSION=20.12.2
+
+# Environment
+ENV NODE_VERSION $NODE_VERSION
