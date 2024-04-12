@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
 const knex = require('knex');
 const morgan = require('morgan');
 
@@ -24,9 +24,11 @@ const db = knex({
 
 const app = express();
 
-// const whitelist = ['http://localhost:3001'];
+// const whitelist = ['http://localhost:3000'];
 // const corsOptions = {
 //   origin: function (origin, callback) {
+//     console.log('origin: ', origin);
+//     console.log('whitelist:', whitelist.includes(origin));
 //     if (whitelist.includes(origin)) {
 //       callback(null, true);
 //     } else {
@@ -37,10 +39,10 @@ const app = express();
 // };
 
 app.use(morgan('combined'));
-//app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(express.json()); // latest version of expressJS now comes with Body-Parser!
 
-const PORT = 3000;
+const PORT = process.env.API_PORT;
 
 app.get('/', (req, res) => {
   db.select('*')
